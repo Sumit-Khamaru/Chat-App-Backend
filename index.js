@@ -4,9 +4,8 @@ const cors = require("cors");
 const socketIO = require("socket.io");
 
 const app = express();
-const port = process.env.PORT || 4500;
+const port = process.env.PORT;
 
-const server = http.createServer(app);
 
 const users = [{}];
 app.use(cors());
@@ -14,24 +13,18 @@ app.get("/", (req, res) => {
   res.send("Welcome to Backend!");
 });
 
+const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on("connection", (socket) => {
   console.log("New Connection");
 
   socket.on("joined", ({ user }) => {
-    users[socket.id] = user;
-    console.log(`${user} has joined`);
+    users[socket.id] = user; console.log(`${user} has joined`);
     
-    socket.broadcast.emit("userJoined", {
-      user: "admin:",
-      message: `${users[socket.id]} has joined`,
-    });
+    socket.broadcast.emit("userJoined", {user: "admin:",message: `${users[socket.id]} has joined`,});
     
-    socket.emit("welcome", {
-      user: "Admin",
-      message: `Welcome to the chat, ${users[socket.id]}`,
-    });
+    socket.emit("welcome", {user: "Admin", message: `Welcome to the chat, ${users[socket.id]}`})
   });
 
   socket.on('message', ({message, id}) => {
@@ -45,5 +38,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(port, () => {
-  console.log(`server is working on http://localhost:${port}`);
+  console.log(`Working`);
 });
