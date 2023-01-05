@@ -12,7 +12,7 @@ require("dotenv").config();
 app.use(cors({origin:true}))
 app.use(cookieParser());
 app.use(bodyParser.json());
-
+const PORT = "https://cchat-backend.onrender.com"
 
 
 
@@ -42,7 +42,7 @@ const server = app.listen(process.env.PORT, () => {
 
 const io = socket(server, {
   cors:{
-    origin: ['http://localhost:3000', 'https://api.multiavatar.com' ],
+    origin: ['https://cchat-app.onrender.com', 'https://api.multiavatar.com' ],
     credentials: true,
   },
 });
