@@ -12,7 +12,8 @@ require("dotenv").config();
 app.use(cors({origin:true}))
 app.use(cookieParser());
 app.use(bodyParser.json());
-const PORT = "https://cchat-backend.onrender.com"
+
+const PORT = process.env.PORT;
 
 
 
@@ -35,14 +36,14 @@ mongoose.connect(process.env.MONGO_URL, {
 });
 
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(`Server is running on PORT ${process.env.PORT}`)
+const server = app.listen(PORT, () => {
+  console.log(`Server is running on PORT ${PORT}`)
 })
 
 
 const io = socket(server, {
   cors:{
-    origin: ['https://cchat-app.onrender.com', 'https://api.multiavatar.com' ],
+    origin: ['https://cchat-app.onrender.com'],
     credentials: true,
   },
 });
