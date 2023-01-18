@@ -1,4 +1,6 @@
 const User = require("../models/userModel");
+import { toast } from "react-toastify";
+
 
 module.exports.register = async (req, res, next) => {
   try {
@@ -8,12 +10,12 @@ module.exports.register = async (req, res, next) => {
     if (nameCheck) {
       return res
         .status(200)
-        .json({ status: false, msg: "Username already taken" });
+        .json({  msg: "Username already taken", status: false });
     }
 
     const emailCheck = await User.findOne({ email });
     if (emailCheck) {
-      return res.status(200).json({ status: false, msg: "Email already used" });
+      return res.status(200).json({  msg: "Email already used", status: false});
     }
 
     const user = await User.create({
@@ -47,14 +49,16 @@ module.exports.login = async (req, res) => {
 
     if (!user) {
       return res
-        .status(200)
+        .status(400)
         .json({ status: false, msg: "Invalid username or password" });
     }
 
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-      return res.status(400).json({ status: false, msg: "Incorrect Password" });
+      return res.
+      status(400).
+      json({ status: false, msg: "Invalid username or password" });
     }
 
     const token = await user.generateToken();
@@ -66,7 +70,6 @@ module.exports.login = async (req, res) => {
     res.status(201).cookie("token", token, options).json({
       status: true,
       user,
-      token,
     });
   } catch (error) {
     res.status(500).json({
